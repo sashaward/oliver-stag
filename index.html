@@ -181,9 +181,9 @@ footer{text-align:center;color:var(--muted);font-size:13px;padding:0 var(--gutte
 <body>
 
 <header class="hero">
-  <p class="eyebrow sc">You are cordially invited to</p>
+  <p class="eyebrow sc">Welcome to</p>
   <h1 class="foil">The Stag</h1>
-  <p class="honour sc">in honour of <span id="groom"></span></p>
+  <p class="honour sc">for our beloved <span id="groom"></span></p>
   <p class="lede"><em id="tagline"></em></p>
   <div class="rule" aria-hidden="true"><span></span>❦<span></span></div>
   <p class="dates sc" id="dates"></p>
@@ -381,11 +381,10 @@ addEventListener('click',e=>{if(!e.target.closest('button,a'))burst(e.clientX,e.
 
 // Finale clink
 const toast=document.getElementById('toast'), cheers=document.getElementById('cheers');
-const toasts=['Cheers!','Santé!','Salute!','Prost!','Slàinte!','Kampai!'];let tn=0;
 document.getElementById('raise').addEventListener('click',()=>{
   toast.classList.remove('clink'); void toast.offsetWidth; toast.classList.add('clink');
   setTimeout(()=>{const r=toast.getBoundingClientRect();burst(r.left+r.width/2,r.top+30,22);buzz(30);
-    cheers.textContent=toasts[tn++%toasts.length];cheers.classList.add('on')},420);
+    cheers.textContent='To you and Chris';cheers.classList.add('on')},420);
   setTimeout(()=>toast.classList.remove('clink'),1600);
 });
 </script>

@@ -11,24 +11,24 @@ window.WEEKEND = {
     {
       key: "fri", name: "Friday", short: "Fri", date: "16 October", numeral: "I", french: "Vendredi",
       theme: "The Arrival",
-      line: "From sweat to sparkling, in a single day.",
+      line: "From sweat to spritz.",
       sommelier: "Opens loudly, settles beautifully. Do not decant the groom.",
       profile: [["Body", "Full", 0.9], ["Tannin", "Rowdy", 0.8], ["Finish", "Late", 0.95]],
       events: [
         { time: "10:15", hour: 10.25, loc: "london", icon: "reformer", title: "Reformer at 1Rebel",
-          note: "We start virtuous. It won't last.", pair: "Electrolytes, and a stern word" },
+          note: "We start virtuous. It won't last.", pair: "Electrolytes, and a tight pair of leggings" },
         { time: "Then", hour: 11.25, loc: "london", icon: "pastry", title: "Greggs Breakfast",
-          note: "Britain's finest pastry house. Sausage roll, obviously.", pair: "A flat white of modest provenance" },
+          note: "Britain's finest pastry house. Steak bake, obviously.", pair: "A flat white of modest provenance" },
         { time: "Midday", hour: 13, loc: "road", icon: "car", title: "Drive to the Kent coast",
           note: "Windows down. The aux cord has been negotiated in advance.", pair: "Service-station Percy Pigs" },
         { time: "18:00", hour: 18, loc: "coast", icon: "glass", title: "Gentleman's Groom Club", sub: "Welcome drinks",
-          note: "Ties optional, charm mandatory.", pair: "Something sparkling, to begin" },
+          note: "Ties optional, charm mandatory.", pair: "Something zesty, to begin" },
         { time: "19:00", hour: 19, loc: "coast", icon: "dinner", title: "Dinner",
-          note: "The first proper sit-down of the weekend.", pair: "A generous red" },
+          note: "The first proper feast of the weekend.", pair: "A generous lager" },
         { time: "20:00", hour: 20, loc: "coast", icon: "brush", title: "Life Drawing", sub: "& a Surprise", surprise: true,
           note: "Bring a steady hand. Say nothing to the groom.", pair: "Classified" },
         { time: "21:00", hour: 21, loc: "coast", icon: "dice", title: "Games Night", sub: "Hosted by Prince",
-          note: "House rules apply. Prince's rules apply more.", pair: "Whatever's left in the fridge" }
+          note: "House rules apply. Prince's rules apply more.", pair: "The dealer's choice" }
       ]
     },
     {
@@ -38,20 +38,20 @@ window.WEEKEND = {
       sommelier: "Structured and generous, with notes of oak, sea salt and terrible dancing.",
       profile: [["Body", "Elegant", 0.7], ["Acidity", "Bright", 0.75], ["Finish", "Very long", 1]],
       events: [
-        { time: "Morning", hour: 9, loc: "coast", icon: "coffee", title: "Coffee at the house",
+        { time: "Morning", hour: 9, loc: "coast", icon: "coffee", title: "Coffee at Leo’s",
           note: "A slow start. Strong coffee. Gentle voices, please.", pair: "A double espresso, no questions" },
         { time: "10:00", hour: 10, loc: "coast", icon: "sun", title: "Yoga on the beach",
           note: "Salute the sun, the sea, and whatever happened last night.", pair: "Sea air, deeply inhaled" },
         { time: "12:00", hour: 12, loc: "oxney", icon: "leaf", title: "Oxney Organic Estate", sub: "Lunch",
-          note: "Organic vines, a long table, absolutely no rush.", pair: "Oxney Classic, naturally" },
+          note: "Organic vines, picnic vibes, absolutely no rush.", pair: "Oxney Classic, naturally" },
         { time: "12:45", hour: 12.75, loc: "oxney", icon: "glass", title: "Tour & Tasting at Oxney",
           note: "Swirl, sniff, sip, and pretend to know what 'flinty' means.", pair: "A spittoon, ignored" },
         { time: "17:00", hour: 17, loc: "chapel", icon: "bottle", title: "Chapel Down", sub: "Tour & tasting", bubbles: true,
-          note: "Golden hour at one of England's great sparkling houses.", pair: "Bubbles. Lots of them." },
+          note: "One of England's great sparkling houses.", pair: "Bubbles. Lots of them." },
         { time: "19:00", hour: 19, loc: "chapel", icon: "dinner", title: "Dinner at Chapel Down",
-          note: "Supper among the vines as the sun goes down.", pair: "The good stuff" },
-        { time: "22:00 – late", hour: 22, loc: "coast", icon: "house", title: "Drinks at the casa",
-          note: "Nightcaps, nonsense, and a speech or two.", pair: "Questionable decisions" }
+          note: "Supper among the vines as the sun goes down.", pair: "The grapey stuff" },
+        { time: "22:00 – late", hour: 22, loc: "coast", icon: "house", title: "Drinks at The Dunes",
+          note: "Nightcaps, nonsense, and a game or two.", pair: "Questionable decisions" }
       ]
     },
     {
@@ -62,8 +62,8 @@ window.WEEKEND = {
       profile: [["Body", "Light", 0.3], ["Salinity", "High", 0.85], ["Finish", "Gentle", 0.55]],
       events: [
         { time: "10:00", hour: 10, loc: "coast", icon: "wave", title: "Swim or walk on the beach",
-          note: "Cold water, warm hearts. Choose your own adventure.", pair: "A towel and a flask" },
-        { time: "13:00", hour: 13, loc: "plough", icon: "pint", title: "Pub lunch at The Plough", sub: "Optional (but who's skipping a roast?)",
+          note: "Cold water, warm hearts. Choose your own adventure.", pair: "A towel and a hot bevvy" },
+        { time: "13:00", hour: 13, loc: "plough", icon: "pint", title: "Pub lunch at The Plough", sub: "Rye's best Sunday spit roast",
           note: "A roast, a pint, and a fond farewell.", pair: "A pint of the local" }
       ]
     }
