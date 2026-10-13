@@ -9,7 +9,7 @@ window.WEEKEND = {
   start: "2026-10-16T10:15:00+01:00",
   days: [
     {
-      key: "fri", name: "Friday", short: "Fri", date: "16 October", numeral: "I", french: "Vendredi",
+      key: "fri", iso: "2026-10-16", name: "Friday", short: "Fri", date: "16 October", numeral: "I", french: "Vendredi",
       theme: "The Arrival",
       line: "From sweat to spritz.",
       sommelier: "Opens loudly, settles beautifully. Do not decant the groom.",
@@ -32,7 +32,7 @@ window.WEEKEND = {
       ]
     },
     {
-      key: "sat", name: "Saturday", short: "Sat", date: "17 October", numeral: "II", french: "Samedi",
+      key: "sat", iso: "2026-10-17", name: "Saturday", short: "Sat", date: "17 October", numeral: "II", french: "Samedi",
       theme: "Among the Vines",
       line: "A long, golden day in wine country.",
       sommelier: "Structured and generous, with notes of oak, sea salt and terrible dancing.",
@@ -55,7 +55,7 @@ window.WEEKEND = {
       ]
     },
     {
-      key: "sun", name: "Sunday", short: "Sun", date: "18 October", numeral: "III", french: "Dimanche",
+      key: "sun", iso: "2026-10-18", name: "Sunday", short: "Sun", date: "18 October", numeral: "III", french: "Dimanche",
       theme: "The Sea",
       line: "Salt water cures everything.",
       sommelier: "A soft, saline finish. Best enjoyed slowly, with a roast.",
