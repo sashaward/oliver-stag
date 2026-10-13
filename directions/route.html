@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Stag · The Route</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Spectral:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<script src="../data.js"></script>
+<style>
+:root{--bg:#0b111b;--ink:#0b111b;--cream:#efe6d6;--sand:#d9c7a7;--muted:#8d93a0;--wine:#7a2333;--wine-hi:#a33a4d;--gold:#d2ad6e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--cream);font-family:'Spectral',Georgia,serif;font-weight:300;font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.dm{font-family:'DM Serif Display',serif;font-weight:400}
+.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+.window{position:sticky;top:0;height:100vh;padding:22px;display:flex;flex-direction:column;gap:14px}
+.frame{position:relative;flex:1;border-radius:200px 200px 10px 10px;overflow:hidden;box-shadow:0 0 0 1px rgba(210,173,110,.35),0 0 0 7px var(--bg),0 0 0 8px rgba(210,173,110,.18),0 30px 80px -30px #000}
+.frame svg{position:absolute;inset:0;width:100%;height:100%}
+.hud{position:absolute;left:0;right:0;bottom:0;padding:18px 26px;display:flex;justify-content:space-between;align-items:flex-end;background:linear-gradient(transparent,rgba(5,8,14,.75));pointer-events:none}
+.clock{font-family:'DM Serif Display',serif;font-size:42px;line-height:1;font-variant-numeric:tabular-nums}
+.clock small{display:block;font-family:'Spectral',serif;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:var(--sand);margin-bottom:4px}
+.where{text-align:right;font-style:italic;color:var(--sand);font-size:17px}
+.where b{display:block;font-family:'DM Serif Display',serif;font-style:normal;color:var(--cream);font-size:24px;font-weight:400;transition:opacity .4s}
+.map{height:118px;border-radius:10px;background:rgba(239,230,214,.03);box-shadow:0 0 0 1px rgba(210,173,110,.2);position:relative}
+.map svg{width:100%;height:100%}
+.map .lbl{font-size:10px;fill:var(--muted);letter-spacing:.12em;text-transform:uppercase;font-family:'Spectral',serif;transition:fill .5s}
+.map .lbl.on{fill:var(--gold)}
+.map .stop{fill:var(--bg);stroke:var(--muted);stroke-width:1.2;transition:stroke .5s,fill .5s}
+.map .stop.on{stroke:var(--gold);fill:var(--wine)}
+
+.content{padding:0 clamp(16px,5vw,70px)}
+.intro{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:60px 0}
+.intro .k{letter-spacing:.3em;text-transform:uppercase;font-size:13px;color:var(--gold)}
+.intro h1{font-size:clamp(70px,9vw,130px);line-height:.95;margin:16px 0 12px}
+.intro h1 em{color:var(--wine-hi);font-style:italic}
+.intro p{color:var(--sand);font-style:italic;font-size:22px}
+.intro .cd{margin-top:28px;display:flex;gap:22px;font-style:normal}
+.intro .cd div{font-family:'DM Serif Display',serif;font-size:36px;line-height:1;color:var(--cream)}
+.intro .cd small{display:block;font-family:'Spectral';font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.intro .go{margin-top:46px;color:var(--muted);font-size:15px;font-style:italic;display:flex;align-items:center;gap:12px}
+.intro .go i{display:block;width:40px;height:1px;background:var(--gold);animation:stretch 2.4s ease-in-out infinite;transform-origin:left}
+@keyframes stretch{50%{transform:scaleX(1.8)}}
+.intro>*{opacity:0;animation:rise 1.2s cubic-bezier(.2,.7,.2,1) forwards}
+.intro>*:nth-child(2){animation-delay:.15s}.intro>*:nth-child(3){animation-delay:.35s}.intro>*:nth-child(4){animation-delay:.5s}.intro>*:nth-child(5){animation-delay:.7s}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+.dayhead{padding:22vh 0 6vh}
+.dayhead .n{font-family:'DM Serif Display',serif;font-style:italic;color:var(--wine-hi);font-size:22px}
+.dayhead h2{font-size:clamp(60px,7vw,96px);line-height:1}
+.dayhead p{color:var(--sand);font-style:italic}
+.dayhead .rule{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin-top:22px;transform:scaleX(0);transform-origin:left;transition:transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.dayhead.in .rule{transform:none}
+.ev{padding:9vh 0 9vh 28px;position:relative;opacity:.28;transition:opacity .7s ease}
+.ev::before{content:"";position:absolute;left:0;top:calc(9vh + 12px);width:9px;height:9px;border-radius:50%;border:1px solid var(--gold);transition:background .5s,box-shadow .5s}
+.ev.active{opacity:1}
+.ev.active::before{background:var(--gold);box-shadow:0 0 0 5px rgba(210,173,110,.15)}
+.ev .tm{font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:10px}
+.ev .tm .ico{width:18px;height:18px}
+.ev h3{font-family:'DM Serif Display',serif;font-weight:400;font-size:clamp(34px,3.6vw,48px);line-height:1.05;margin:8px 0 4px}
+.ev .sub{font-style:italic;color:var(--sand);font-size:21px}
+.ev .note{color:var(--muted);margin-top:8px;max-width:440px}
+.ev.active .note{color:#b9bcc4}
+.reveal-btn{margin-top:14px;font:inherit;font-style:italic;font-size:16px;color:var(--gold);background:none;border:1px solid rgba(210,173,110,.4);border-radius:99px;padding:6px 18px;cursor:pointer}
+.reveal-btn:hover{background:rgba(210,173,110,.08)}
+.end{min-height:90vh;display:flex;flex-direction:column;justify-content:center;padding:10vh 0}
+.end h2{font-size:clamp(54px,7vw,92px);line-height:1}
+.end h2 em{color:var(--wine-hi)}
+.end p{color:var(--sand);font-style:italic;margin-top:10px}
+
+/* scene animation */
+.waves path{animation:wave 7s ease-in-out infinite alternate}
+.waves path:nth-child(2){animation-duration:9s;animation-delay:-3s}
+.waves path:nth-child(3){animation-duration:11s;animation-delay:-5s}
+@keyframes wave{to{transform:translateX(-30px)}}
+.star{animation:twinkle 3s ease-in-out infinite}
+@keyframes twinkle{50%{opacity:.25}}
+.shoot{stroke:#fff;stroke-width:1.2;stroke-linecap:round;stroke-dasharray:0 400;opacity:0}
+.shoot.go{animation:shoot 1.2s ease-out}
+@keyframes shoot{0%{stroke-dasharray:0 400;stroke-dashoffset:0;opacity:1}100%{stroke-dasharray:60 400;stroke-dashoffset:-140;opacity:0}}
+.bub{fill:none;stroke:rgba(255,236,190,.8);stroke-width:.8;animation:bub 3s linear infinite;opacity:0}
+@keyframes bub{0%{transform:translateY(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-60px);opacity:0}}
+.bubbles{transition:opacity 1s}
+.carIcon{transition:opacity .5s}
+
+@media (max-width:860px){
+  .layout{display:block}
+  .window{height:46vh;padding:10px 10px 6px;z-index:5;background:var(--bg);gap:8px}
+  .frame{border-radius:120px 120px 8px 8px}
+  .map{height:70px}
+  .clock{font-size:30px}.where b{font-size:19px}.where{font-size:14px}.hud{padding:12px 16px}
+  .intro{min-height:60vh}
+  .ev{padding:6vh 0 6vh 24px}.ev::before{top:calc(6vh + 10px)}
+  .dayhead{padding:12vh 0 4vh}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="window">
+    <div class="frame">
+      <svg id="scene" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop id="s1" offset="0"/><stop id="s2" offset=".6"/><stop id="s3" offset="1"/>
+          </linearGradient>
+          <radialGradient id="sunglow"><stop offset="0" stop-color="#ffe2a8" stop-opacity=".7"/><stop offset="1" stop-color="#ffe2a8" stop-opacity="0"/></radialGradient>
+          <radialGradient id="moonglow"><stop offset="0" stop-color="#dfe6f5" stop-opacity=".35"/><stop offset="1" stop-color="#dfe6f5" stop-opacity="0"/></radialGradient>
+          <mask id="crescent"><circle cx="0" cy="0" r="11" fill="#fff"/><circle cx="5" cy="-4" r="10" fill="#000"/></mask>
+        </defs>
+        <rect width="400" height="300" fill="url(#sky)"/>
+        <g id="stars"></g>
+        <line class="shoot" id="shoot" x1="300" y1="30" x2="160" y2="90"/>
+        <g id="sun"><circle r="46" fill="url(#sunglow)"/><circle r="13" fill="#ffe9bf"/></g>
+        <g id="moon"><circle r="34" fill="url(#moonglow)"/><circle r="11" fill="#e9edf5" mask="url(#crescent)"/></g>
+        <path id="far" d="M0 196C50 176 110 186 160 178S260 160 300 176 370 186 400 178V300H0Z"/>
+        <rect id="sea" x="0" y="200" width="400" height="40"/>
+        <g class="waves" fill="none" stroke-width=".8" id="waves">
+          <path d="M-20 210q10-3 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0"/>
+          <path d="M-20 220q10-3 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0"/>
+          <path d="M-20 230q10-3 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0"/>
+        </g>
+        <path id="mid" d="M0 214C60 192 140 194 210 210 250 219 290 226 400 232V300H0Z"/>
+        <g id="rows" fill="none" stroke-width="1.1"></g>
+        <g class="bubbles" id="bubbles" opacity="0"></g>
+        <path id="fore" d="M0 258C90 244 190 250 290 262 330 266 370 264 400 262V300H0Z"/>
+        <g id="house" transform="translate(316 238)"><path id="houseBody" d="M0 14V5L8 0 16 5V14Z"/><rect id="win" x="6" y="7" width="4" height="4"/></g>
+      </svg>
+      <div class="hud">
+        <div class="clock"><small id="dayLbl">Friday</small><span id="clk">07:00</span></div>
+        <div class="where">currently<b id="loc">At home</b></div>
+      </div>
+    </div>
+    <div class="map">
+      <svg viewBox="0 0 400 110" id="map">
+        <path d="M40 42C110 30 200 34 330 66" fill="none" stroke="rgba(210,173,110,.35)" stroke-dasharray="2 5"/>
+        <path d="M330 66C300 90 250 92 232 78S200 48 188 54M188 54C230 40 300 40 330 66M330 66C340 50 330 30 300 26" fill="none" stroke="rgba(210,173,110,.25)" stroke-dasharray="2 5"/>
+        <g id="stops"></g>
+        <g id="dot"><circle r="9" fill="rgba(210,173,110,.18)"/><circle r="4" fill="#d2ad6e"/></g>
+      </svg>
+    </div>
+  </aside>
+
+  <main class="content" id="content">
+    <section class="intro">
+      <span class="k">A weekend in Kent</span>
+      <h1 class="dm">The <em>Stag</em></h1>
+      <p id="tag"></p>
+      <div class="cd" id="cd"></div>
+      <span class="go"><i></i>Scroll, and watch the days go by</span>
+    </section>
+  </main>
+</div>
+
+<script>
+const W=WEEKEND;
+document.getElementById('tag').textContent=W.tagline+'. '+W.dates+'.';
+const cdEl=document.getElementById('cd');
+function tick(){const c=countdownParts();cdEl.innerHTML=c?[['d','days'],['h','hours'],['m','mins']].map(([k,l])=>`<div>${c[k]}<small>${l}</small></div>`).join(''):'<div>Underway<small>enjoy it</small></div>'}
+tick();setInterval(tick,30000);
+
+const PLACES={home:['At home',null],london:['London',[40,42]],road:['On the A2',[180,36]],coast:['The Kent coast',[330,66]],
+  oxney:['Oxney Organic',[232,78]],chapel:['Chapel Down',[188,54]],plough:['The Plough',[300,26]]};
+const stopsG=document.getElementById('stops');
+['london','coast','oxney','chapel','plough'].forEach(k=>{const[n,[x,y]]=PLACES[k];
+  stopsG.insertAdjacentHTML('beforeend',`<circle class="stop" data-k="${k}" cx="${x}" cy="${y}" r="5"/><text class="lbl" data-k="${k}" x="${x}" y="${y+(k==='plough'||k==='chapel'?-12:20)}" text-anchor="middle">${n.replace('The ','')}</text>`)});
+
+// Build content
+const content=document.getElementById('content');
+const stopList=[{T:7,loc:'home',day:0}];
+W.days.forEach((d,di)=>{
+  content.insertAdjacentHTML('beforeend',`<div class="dayhead io"><span class="n">${d.numeral}. ${d.theme}</span><h2 class="dm">${d.name}</h2><p>${d.date} — ${d.line}</p><div class="rule"></div></div>`);
+  d.events.forEach(e=>{
+    const idx=stopList.push({T:di*24+e.hour,loc:e.loc,day:di,bubbles:!!e.bubbles})-1;
+    content.insertAdjacentHTML('beforeend',`<article class="ev" data-i="${idx}">
+      <span class="tm">${icon(e.icon)}${e.time}</span>
+      <h3>${e.title}</h3>${e.sub?`<div class="sub">${e.sub}</div>`:''}
+      <p class="note">${e.note}</p>
+      ${e.surprise?`<button class="reveal-btn">Reveal the surprise</button>`:''}</article>`);
+  });
+});
+content.insertAdjacentHTML('beforeend',`<section class="end"><span class="n" style="color:var(--gold);letter-spacing:.3em;text-transform:uppercase;font-size:13px">Journey's end</span><h2 class="dm">Home, with <em>stories.</em></h2><p>Raise a glass to the groom. The rest stays in Kent.</p></section>`);
+stopList.push({T:2*24+16,loc:'plough',day:2});
+
+document.querySelectorAll('.reveal-btn').forEach(b=>{const q=['Patience.','It\'s called a surprise for a reason.','Sealed until 20:00.','Ask Prince. (He won\'t tell either.)'];let k=0;b.onclick=()=>b.textContent=q[k++%q.length]});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.4});
+document.querySelectorAll('.io').forEach(el=>io.observe(el));
+
+// Scene setup
+const starsG=document.getElementById('stars');let starHTML='';
+for(let i=0;i<70;i++){const r=Math.random()*1.1+.3;starHTML+=`<circle class="star" cx="${(Math.random()*400).toFixed(1)}" cy="${(Math.random()*170).toFixed(1)}" r="${r.toFixed(2)}" fill="#fff" style="animation-delay:${(Math.random()*3).toFixed(1)}s;animation-duration:${(2+Math.random()*3).toFixed(1)}s"/>`}
+starsG.innerHTML=starHTML;
+const rowsG=document.getElementById('rows');
+for(let i=0;i<7;i++){const y=222+i*5.5;rowsG.insertAdjacentHTML('beforeend',`<path d="M${-10+i*6} ${y}C60 ${y-12-i} 140 ${y-10-i} ${210-i*4} ${y+4}" stroke-dasharray="${1.5+i*.4} ${2+i*.2}"/>`)}
+const bubG=document.getElementById('bubbles');
+for(let i=0;i<16;i++)bubG.insertAdjacentHTML('beforeend',`<circle class="bub" cx="${110+Math.random()*110}" cy="${215+Math.random()*10}" r="${(1+Math.random()*1.8).toFixed(1)}" style="animation-delay:${(Math.random()*3).toFixed(1)}s"/>`);
+
+// Colour keyframes by hour: [top, mid, horizon]
+const K=[[0,'#060a15','#0e1528','#18203a'],[5.5,'#111733','#30264a','#7a4f5c'],[7,'#26365a','#7c6176','#e09f7a'],[10,'#344e6e','#6f879c','#c2bba3'],
+  [13,'#3b5d7d','#7f98ac','#cdc4a8'],[16.5,'#33476a','#9c7a68','#e4a871'],[18.3,'#2a2142','#7a2e46','#d9744f'],[19.6,'#151532','#3a1e3d','#6b2e40'],[21.5,'#070b19','#0f1529','#1c2238'],[24,'#060a15','#0e1528','#18203a']];
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,t)=>{const A=hex(a),B=hex(b);return'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')'};
+const mixRGB=(A,B,t)=>'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')';
+function skyAt(h){for(let i=0;i<K.length-1;i++){if(h>=K[i][0]&&h<=K[i+1][0]){const t=(h-K[i][0])/(K[i+1][0]-K[i][0]),s=t*t*(3-2*t);return[1,2,3].map(j=>mix(K[i][j],K[i+1][j],s))}}return K[0].slice(1)}
+const light=h=>Math.max(0,Math.min(1,(Math.sin((h-6)/13*Math.PI)+.15)/1.1));
+const night=[8,11,20];
+const $=id=>document.getElementById(id);
+const s1=$('s1'),s2=$('s2'),s3=$('s3'),sun=$('sun'),moon=$('moon'),far=$('far'),mid=$('mid'),fore=$('fore'),sea=$('sea'),waves=$('waves'),rows=$('rows'),bub=$('bubbles'),houseBody=$('houseBody'),win=$('win'),dot=$('dot');
+const clk=$('clk'),dayLbl=$('dayLbl'),locEl=$('loc');
+const evs=[...document.querySelectorAll('.ev')];
+let target=stopList[0],cur={T:stopList[0].T,x:40,y:42},lastLoc='';
+function pickActive(){
+  const mid=innerWidth<=860?innerHeight*.72:innerHeight*.5;let best=null,bd=1e9;
+  evs.forEach(e=>{const r=e.getBoundingClientRect(),c=r.top+r.height/2,d=Math.abs(c-mid);if(d<bd){bd=d;best=e}});
+  const firstTop=evs[0].getBoundingClientRect().top;
+  const lastBottom=evs[evs.length-1].getBoundingClientRect().bottom;
+  evs.forEach(e=>e.classList.toggle('active',e===best&&firstTop<innerHeight*.8));
+  if(firstTop>innerHeight*.8)target=stopList[0];
+  else if(lastBottom<innerHeight*.3)target=stopList[stopList.length-1];
+  else target=stopList[+best.dataset.i];
+}
+addEventListener('scroll',pickActive,{passive:true});addEventListener('resize',pickActive);
+function frame(){
+  const k=REDUCED?1:.045;
+  cur.T+=(target.T-cur.T)*k;
+  const P=PLACES[target.loc][1]||[40,42];cur.x+=(P[0]-cur.x)*k*1.4;cur.y+=(P[1]-cur.y)*k*1.4;
+  const h=((cur.T%24)+24)%24,L=light(h);
+  const [a,b,c]=skyAt(h);s1.setAttribute('stop-color',a);s2.setAttribute('stop-color',b);s3.setAttribute('stop-color',c);
+  starsG.style.opacity=Math.max(0,1-L*2.2);
+  // sun arc 6→19.5, moon arc 18→30
+  const sa=(h-6)/13.5*Math.PI;sun.setAttribute('transform',`translate(${200-175*Math.cos(sa)} ${205-160*Math.sin(sa)})`);sun.style.opacity=h>5.5&&h<20?1:0;
+  const mh=h<12?h+24:h,ma=(mh-18)/12*Math.PI;moon.setAttribute('transform',`translate(${200-170*Math.cos(ma)} ${200-150*Math.sin(ma)})`);moon.style.opacity=(mh>18.5&&mh<29.5)?1:0;
+  far.setAttribute('fill',mixRGB(night,[92,96,104],L*.85));
+  sea.setAttribute('fill',mixRGB([10,16,30],[60,82,96],L));
+  waves.setAttribute('stroke',mixRGB([60,70,95],[190,200,200],L));
+  mid.setAttribute('fill',mixRGB([12,15,22],[58,70,48],L));
+  rows.setAttribute('stroke',mixRGB([22,26,32],[90,104,62],L));
+  fore.setAttribute('fill',mixRGB([5,7,12],[30,38,26],L));
+  houseBody.setAttribute('fill',mixRGB([10,12,18],[40,42,38],L));
+  win.setAttribute('fill',L<.45?'#f3c27a':'rgba(0,0,0,.25)');
+  bub.style.opacity=target.bubbles?1:0;
+  dot.setAttribute('transform',`translate(${cur.x} ${cur.y})`);
+  const day=Math.max(0,Math.min(2,Math.floor(cur.T/24)));
+  dayLbl.textContent=W.days[day].name;
+  clk.textContent=String(Math.floor(h)).padStart(2,'0')+':'+String(Math.floor((h%1)*60/5)*5).padStart(2,'0');
+  if(target.loc!==lastLoc){lastLoc=target.loc;locEl.style.opacity=0;setTimeout(()=>{locEl.textContent=PLACES[lastLoc][0];locEl.style.opacity=1},250);
+    document.querySelectorAll('#stops [data-k]').forEach(el=>el.classList.toggle('on',el.dataset.k===lastLoc))}
+  requestAnimationFrame(frame);
+}
+pickActive();frame();
+// Shooting stars at night
+const shoot=$('shoot');
+setInterval(()=>{const h=((cur.T%24)+24)%24;if(light(h)<.2&&!REDUCED){shoot.classList.remove('go');void shoot.getBBox();shoot.classList.add('go')}},5200);
+</script>
+</body>
+</html>

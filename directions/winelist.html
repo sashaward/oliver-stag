@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Stag · The Wine List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="../data.js"></script>
+<style>
+:root{
+  --bg:#0d1813; --bg2:#13231b; --paper:#f1e8d6; --paper2:#e6dac0; --ink:#2a1e18; --ink2:#6c5c4f;
+  --claret:#7b2030; --gold:#b8955a; --gold-hi:#dcc08a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--paper);font-family:'Libre Caslon Text',Georgia,serif;font-size:17px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(ellipse 90% 60% at 50% 0%,#1c3328 0%,transparent 70%),radial-gradient(circle at 20% 80%,#15291f 0,transparent 40%)}
+.pf{font-family:'Playfair Display',serif}
+.caps{text-transform:uppercase;letter-spacing:.22em;font-size:11px}
+
+/* ——— Hero label ——— */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 16px 60px;position:relative}
+.corkwrap{position:relative;height:84px;width:60px;margin-bottom:-6px;z-index:2}
+.cork{position:absolute;left:50%;bottom:0;width:38px;height:62px;margin-left:-19px;border-radius:5px 5px 3px 3px;cursor:pointer;border:0;
+  background:repeating-linear-gradient(0deg,#c49a6c 0 3px,#b88b5c 3px 5px,#cfa77a 5px 9px);
+  box-shadow:inset -6px 0 10px rgba(0,0,0,.25),inset 4px 0 6px rgba(255,255,255,.15);
+  animation:wiggle 3.5s ease-in-out 3s infinite;transform-origin:50% 100%}
+.cork::after{content:"";position:absolute;inset:auto 6px 10px;height:14px;border-radius:50%;border:1px solid rgba(80,40,20,.35)}
+@keyframes wiggle{0%,86%,100%{transform:rotate(0)}89%{transform:rotate(-5deg) translateY(-3px)}92%{transform:rotate(5deg) translateY(-5px)}95%{transform:rotate(-3deg) translateY(-2px)}}
+.cork.popped{animation:pop 1.3s cubic-bezier(.2,.6,.4,1) forwards;pointer-events:none}
+@keyframes pop{0%{transform:none}100%{transform:translate(160px,-70vh) rotate(720deg);opacity:0}}
+.hint{position:absolute;left:100%;top:22px;white-space:nowrap;font-style:italic;color:var(--gold-hi);font-size:14px;padding-left:12px;opacity:0;animation:fade 1s 3.4s forwards}
+.hint::before{content:"← ";}
+.neck{width:72px;height:22px;background:linear-gradient(90deg,#4a0f19,#7b2030 40%,#5a1420);border-radius:3px 3px 0 0;margin-bottom:-1px;position:relative;z-index:1;box-shadow:0 2px 0 #2a080d}
+.label{position:relative;width:min(440px,92vw);background:var(--paper);color:var(--ink);text-align:center;padding:42px 34px 34px;border-radius:4px;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.8),0 0 0 1px rgba(0,0,0,.05);
+  background-image:radial-gradient(circle at 30% 20%,rgba(255,255,255,.5),transparent 50%),radial-gradient(circle at 80% 90%,rgba(160,120,60,.12),transparent 40%);
+  opacity:0;transform:translateY(30px) rotate(-1.5deg);animation:laydown 1.4s cubic-bezier(.2,.7,.2,1) .3s forwards}
+@keyframes laydown{to{opacity:1;transform:none}}
+.label::before{content:"";position:absolute;inset:10px;border:1px solid var(--gold);pointer-events:none}
+.label::after{content:"";position:absolute;inset:15px;border:1px solid rgba(184,149,90,.45);pointer-events:none}
+.antlers{width:96px;height:56px;margin:4px auto 8px;display:block}
+.antlers path{fill:none;stroke:var(--claret);stroke-width:1.5;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2.2s ease 1.2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.label h1{font-family:'Playfair Display',serif;font-weight:400;font-size:clamp(42px,8vw,58px);line-height:1;color:var(--ink)}
+.label h1 em{display:block;color:var(--claret);font-size:1.08em}
+.label .vint{font-family:'Playfair Display',serif;font-size:30px;letter-spacing:.3em;margin:18px 0 4px;color:var(--ink);padding-left:.3em}
+.label .tiny{color:var(--ink2);font-size:10.5px}
+.label hr{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px auto;width:70%}
+.label .cnt{font-style:italic;color:var(--claret);font-size:15px;margin-top:6px;min-height:1.6em}
+.fleck{position:fixed;width:6px;height:10px;pointer-events:none;z-index:60;border-radius:1px;animation:fleck 1.6s cubic-bezier(.15,.6,.4,1) forwards}
+@keyframes fleck{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.scrollcue{margin-top:46px;color:var(--gold-hi);font-style:italic;font-size:15px;opacity:0;animation:fade 1s 2.4s forwards;text-decoration:none}
+.scrollcue span{display:inline-block;animation:bob 2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(5px)}}
+@keyframes fade{to{opacity:1}}
+
+/* ——— La Carte ——— */
+.carte-title{text-align:center;padding:10vh 16px 4vh}
+.carte-title h2{font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:clamp(40px,6vw,64px);color:var(--paper)}
+.carte-title p{color:var(--gold-hi);font-style:italic}
+.page{position:relative;max-width:760px;margin:0 auto 9vh;background:var(--paper);color:var(--ink);padding:56px clamp(22px,6vw,70px) 50px;border-radius:3px;
+  box-shadow:0 50px 90px -40px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.4) inset;
+  background-image:radial-gradient(circle at 10% 0%,rgba(255,255,255,.55),transparent 40%),radial-gradient(circle at 100% 100%,rgba(150,110,50,.13),transparent 45%);
+  opacity:0;transform:translateY(80px) rotate(var(--tilt,1.5deg));transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.7,.2,1)}
+.page.in{opacity:1;transform:rotate(calc(var(--tilt,1.5deg)*.25))}
+.page::before{content:"";position:absolute;inset:12px;border:1px solid rgba(184,149,90,.5);pointer-events:none}
+.mark{position:absolute;right:30px;top:20px;width:140px;opacity:.07;color:var(--claret)}
+.ph{display:flex;align-items:flex-end;gap:22px;border-bottom:1px solid var(--gold);padding-bottom:18px;margin-bottom:20px}
+.ph .num{font-family:'Playfair Display',serif;font-style:italic;font-size:76px;line-height:.8;color:var(--claret)}
+.ph .fr{font-style:italic;color:var(--ink2);font-size:14px}
+.ph h3{font-family:'Playfair Display',serif;font-weight:400;font-size:clamp(30px,4.5vw,42px);line-height:1.05}
+.ph h3 em{color:var(--ink2);font-size:.6em;margin-left:6px}
+.ph .theme{color:var(--claret);font-size:12px;margin-top:6px}
+
+.profile{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:6px 0 26px}
+.profile div{font-size:12px;color:var(--ink2)}
+.profile b{display:block;font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:17px;color:var(--ink);margin:2px 0 6px}
+.bar{height:3px;background:rgba(42,30,24,.1);border-radius:2px;overflow:hidden}
+.bar i{display:block;height:100%;width:var(--v);background:linear-gradient(90deg,var(--claret),#a8354a);transform:scaleX(0);transform-origin:left;transition:transform 1.6s cubic-bezier(.2,.7,.2,1) .6s}
+.page.in .bar i{transform:scaleX(1)}
+
+.list{list-style:none}
+.item{position:relative;display:grid;grid-template-columns:62px 1fr;gap:6px;padding:16px 0;border-bottom:1px dotted rgba(42,30,24,.18);
+  opacity:0;transform:translateY(12px);transition:opacity .8s ease,transform .8s ease}
+.page.in .item{opacity:1;transform:none}
+.no{font-size:11px;color:var(--gold);letter-spacing:.12em;padding-top:9px}
+.line{display:flex;align-items:baseline;gap:4px}
+.t{font-family:'Playfair Display',serif;font-size:23px;line-height:1.2}
+.t small{font-style:italic;color:var(--ink2);font-size:15px;margin-left:6px}
+.dots{flex:1;min-width:20px;border-bottom:2px dotted rgba(42,30,24,.35);margin:0 8px;transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.page.in .dots{transform:scaleX(1)}
+.tm{font-family:'Playfair Display',serif;font-variant-numeric:oldstyle-nums;font-size:20px;color:var(--claret);white-space:nowrap}
+.tm.word{font-style:italic;font-size:16px}
+.nt{font-style:italic;color:var(--ink2);font-size:15.5px;margin-top:3px}
+.pr{font-size:12.5px;color:var(--ink);margin-top:4px}
+.pr span{color:var(--gold);text-transform:uppercase;letter-spacing:.18em;font-size:10px;margin-right:8px}
+.secret .t{position:relative}
+.secret .sx{display:inline-block;background:var(--ink);color:transparent;border-radius:2px;cursor:pointer;transition:background .4s, color .4s;padding:0 6px}
+.secret .sx:hover{background:var(--claret)}
+.secret .sx.no{animation:nope .45s}
+@keyframes nope{25%,75%{transform:translateX(-4px)}50%{transform:translateX(4px)}}
+.stain{position:absolute;pointer-events:none;width:110px;height:110px;opacity:0;transition:opacity 1.4s ease;z-index:0}
+.stain.on{opacity:1}
+.item>*{position:relative;z-index:1}
+.somm{margin-top:28px;padding:18px 22px;border-left:2px solid var(--claret);background:rgba(123,32,48,.05);font-style:italic;font-size:16px;color:var(--ink)}
+.somm b{display:block;font-style:normal;color:var(--claret);font-weight:400;margin-bottom:4px}
+.bubbles{position:absolute;right:0;top:0;bottom:0;width:120px;overflow:hidden;pointer-events:none;z-index:0}
+.bubbles i{position:absolute;bottom:-8px;border-radius:50%;border:1px solid rgba(184,149,90,.8);animation:rise linear infinite;opacity:0}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:.9}100%{transform:translateY(-110px) translateX(var(--dx));opacity:0}}
+
+.close{text-align:center;padding:6vh 16px 14vh}
+.close h2{font-family:'Playfair Display',serif;font-weight:400;font-style:italic;font-size:clamp(46px,7vw,80px)}
+.close p{color:var(--gold-hi);font-style:italic}
+.sante{margin-top:30px;font:inherit;font-style:italic;font-size:18px;color:var(--paper);background:transparent;border:1px solid var(--gold);padding:12px 32px;border-radius:2px;cursor:pointer;letter-spacing:.04em;transition:background .3s,color .3s}
+.sante:hover{background:var(--gold);color:var(--bg)}
+.counter{display:block;margin-top:18px;color:var(--paper2);font-size:14px;min-height:1.4em}
+
+@media (max-width:600px){
+  .ph{gap:14px}.ph .num{font-size:54px}
+  .item{grid-template-columns:1fr}.no{padding-top:0}
+  .line{flex-wrap:wrap}.dots{display:none}.tm{width:100%;order:-1;font-size:16px}
+  .profile{gap:10px}
+  .hint{left:50%;top:auto;bottom:-26px;transform:translateX(-50%);padding:0}.hint::before{content:""}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="corkwrap"><button class="cork" id="cork" aria-label="Pop the cork"></button><span class="hint">pop me</span></div>
+  <div class="neck"></div>
+  <div class="label" id="label">
+    <p class="caps tiny">Grand Vin de Week-end · Appellation Kent Contrôlée</p>
+    <svg class="antlers" viewBox="0 0 96 56">
+      <path pathLength="1" d="M44 54C44 40 40 30 30 20M36 27C30 26 24 22 22 14M32 22C34 15 33 9 30 3M40 36C33 36 26 34 20 30M27 18C22 16 18 12 16 6"/>
+      <path pathLength="1" d="M52 54C52 40 56 30 66 20M60 27C66 26 72 22 74 14M64 22C62 15 63 9 66 3M56 36C63 36 70 34 76 30M69 18C74 16 78 12 80 6"/>
+    </svg>
+    <h1>Domaine<em>du Cerf</em></h1>
+    <hr>
+    <p class="caps tiny">The Stag · 16 – 18 Octobre</p>
+    <p class="vint">2026</p>
+    <p class="cnt" id="cnt"></p>
+    <hr>
+    <p class="tiny" style="font-style:italic">Mis en bouteille par les garçons · 75cl of pure joy</p>
+  </div>
+  <a class="scrollcue" href="#carte">Consult the list <span>↓</span></a>
+</header>
+
+<div class="carte-title" id="carte">
+  <p>La Carte</p>
+  <h2>A list of fine moments</h2>
+</div>
+
+<main id="pages"></main>
+
+<section class="close">
+  <p>Digestif</p>
+  <h2>Santé, to the groom</h2>
+  <button class="sante" id="sante">Raise a glass</button>
+  <span class="counter" id="toasts"></span>
+</section>
+
+<script>
+const W=WEEKEND;
+const cnt=document.getElementById('cnt');
+function tick(){const c=countdownParts();cnt.textContent=window.uncorked?'Uncorked. The weekend is breathing.':c?`Uncorks in ${c.d} days, ${c.h} hrs & ${c.m} min`:'Now pouring.'}
+tick();setInterval(tick,1000);
+
+// Cork pop
+function flecks(x,y,n,cols){
+  if(REDUCED)return;
+  for(let i=0;i<n;i++){const f=document.createElement('i');f.className='fleck';
+    const a=-Math.PI/2+(Math.random()-.5)*2.2,d=80+Math.random()*220;
+    Object.assign(f.style,{left:x+'px',top:y+'px',background:cols[i%cols.length]});
+    f.style.setProperty('--dx',Math.cos(a)*d+'px');f.style.setProperty('--dy',Math.sin(a)*d+160+'px');f.style.setProperty('--r',(Math.random()*720-360)+'deg');
+    document.body.appendChild(f);setTimeout(()=>f.remove(),1700)}
+}
+document.getElementById('cork').addEventListener('click',e=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  e.currentTarget.classList.add('popped');document.querySelector('.hint').style.display='none';
+  flecks(r.left+r.width/2,r.top,40,['#dcc08a','#b8955a','#f1e8d6','#7b2030']);
+  window.uncorked=true;tick();
+});
+
+// Wine stain ring
+function stainSVG(){
+  const rot=Math.random()*360,c='rgba(123,32,48,';
+  return `<svg class="stain" viewBox="0 0 100 100" style="transform:rotate(${rot}deg)">
+    <circle cx="50" cy="50" r="38" fill="none" stroke="${c}.16)" stroke-width="5" stroke-dasharray="160 6 40 12"/>
+    <circle cx="50" cy="50" r="36" fill="none" stroke="${c}.10)" stroke-width="2"/>
+    <circle cx="50" cy="50" r="34" fill="${c}.025)"/>
+    <circle cx="86" cy="64" r="2.6" fill="${c}.16)"/><circle cx="91" cy="58" r="1.4" fill="${c}.14)"/></svg>`;
+}
+
+const antlerMark=`<svg class="mark" viewBox="0 0 96 56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M44 54C44 40 40 30 30 20M36 27C30 26 24 22 22 14M32 22C34 15 33 9 30 3M40 36C33 36 26 34 20 30M27 18C22 16 18 12 16 6M52 54C52 40 56 30 66 20M60 27C66 26 72 22 74 14M64 22C62 15 63 9 66 3M56 36C63 36 70 34 76 30M69 18C74 16 78 12 80 6"/></svg>`;
+
+const host=document.getElementById('pages');let n=0;
+W.days.forEach((day,di)=>{
+  const p=document.createElement('section');p.className='page';p.id=day.key;
+  p.style.setProperty('--tilt',[1.6,-1.4,1.2][di]+'deg');
+  p.innerHTML=`${antlerMark}
+    <div class="ph"><span class="num">${day.numeral}.</span>
+      <div><p class="fr">${day.french}</p><h3>${day.name}<em>${day.date}</em></h3><p class="theme caps">${day.theme}</p></div></div>
+    <div class="profile">${day.profile.map(([k,v,x])=>`<div><span class="caps">${k}</span><b>${v}</b><div class="bar"><i style="--v:${x*100}%"></i></div></div>`).join('')}</div>
+    <ol class="list">${day.events.map((e,i)=>{n++;const isWord=!/\d/.test(e.time);return`
+      <li class="item ${e.surprise?'secret':''}" style="transition-delay:${.35+i*.12}s">
+        ${e.bubbles?`<div class="bubbles">${[...Array(12)].map(()=>{const s=3+Math.random()*5;return`<i style="left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${(2.5+Math.random()*3).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;--dx:${((Math.random()-.5)*16).toFixed(0)}px"></i>`}).join('')}</div>`:''}
+        <span class="no">No. ${String(n).padStart(2,'0')}</span>
+        <div>
+          <div class="line"><span class="t">${e.title}${e.surprise?` <small>& a</small> <span class="sx" title="Classified">Surprise</span>`:e.sub?`<small>${e.sub}</small>`:''}</span>
+            <span class="dots" style="transition-delay:${.6+i*.12}s"></span><span class="tm ${isWord?'word':''}">${e.time}</span></div>
+          <p class="nt">${e.note}</p>
+          <p class="pr"><span>Pairs with</span>${e.pair}</p>
+        </div>
+      </li>`}).join('')}</ol>
+    <div class="somm"><b class="caps">Sommelier's note</b>“${day.sommelier}”</div>`;
+  host.appendChild(p);
+});
+
+// Secret: refuses to reveal
+const nos=['Classified','Absolutely not','Ask Prince','Sealed until 20:00','Nice try'];
+document.querySelectorAll('.sx').forEach(s=>{let k=0;s.addEventListener('click',()=>{s.classList.remove('no');void s.offsetWidth;s.classList.add('no');s.title=nos[++k%nos.length];s.textContent=nos[k%nos.length]})});
+
+// Stain on first hover
+document.querySelectorAll('.item').forEach(it=>it.addEventListener('mouseenter',()=>{
+  if(it.dataset.s||Math.random()<.35)return;it.dataset.s=1;
+  it.insertAdjacentHTML('afterbegin',stainSVG());const s=it.firstElementChild;
+  s.style.right=(10+Math.random()*30)+'%';s.style.top=(-30+Math.random()*20)+'px';
+  requestAnimationFrame(()=>s.classList.add('on'));
+}));
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.page').forEach(p=>io.observe(p));
+
+// Toasts counter
+let toasts=0;const msgs=['One glass raised.','Two. The groom blushes.','Three. Someone fetch Prince.','Four. Steady now.','Five. Who invited you?'];
+document.getElementById('sante').addEventListener('click',e=>{
+  const r=e.currentTarget.getBoundingClientRect();flecks(r.left+r.width/2,r.top,24,['#dcc08a','#7b2030','#f1e8d6']);
+  document.getElementById('toasts').textContent=msgs[Math.min(toasts++,msgs.length-1)];
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Stag · Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0c0809;overflow:hidden;font-family:'Cormorant Garamond',Georgia,serif}
+iframe{position:fixed;inset:0;width:100%;height:100%;border:0;transition:opacity .35s ease}
+iframe.fade{opacity:0}
+.bar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:10;display:flex;align-items:center;gap:4px;padding:6px;border-radius:99px;
+  background:rgba(20,14,14,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 0 0 1px rgba(201,163,92,.28),0 18px 40px -12px rgba(0,0,0,.8);max-width:calc(100vw - 32px)}
+.bar button{font:inherit;font-size:16px;color:#cdbfae;background:none;border:0;padding:8px 16px;border-radius:99px;cursor:pointer;white-space:nowrap;transition:background .25s,color .25s}
+.bar button b{font-style:italic;font-weight:400;color:#c9a35c;margin-right:6px}
+.bar button:hover{color:#f3e8d6}
+.bar button[aria-pressed=true]{background:#efe4d2;color:#1a0d10}
+.bar button[aria-pressed=true] b{color:#7b2030}
+.bar a{color:#a8968b;font-size:14px;font-style:italic;padding:0 12px 0 8px;text-decoration:none;white-space:nowrap}
+.bar a:hover{color:#efe4d2}
+.blurb{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);z-index:10;color:#efe4d2;font-style:italic;font-size:15px;background:rgba(20,14,14,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  padding:5px 16px;border-radius:99px;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+.blurb.on{opacity:1}
+@media (max-width:640px){.bar button span{display:none}.bar button b{margin:0}.bar button{padding:8px 14px}.blurb{white-space:normal;text-align:center;border-radius:12px}}
+</style>
+</head>
+<body>
+<iframe id="f" title="Design direction"></iframe>
+<div class="blurb" id="blurb"></div>
+<nav class="bar" id="bar" aria-label="Design directions"></nav>
+<script>
+const D=[
+  {id:'cellar',n:'I',name:'The Cellar',blurb:'Oxblood & gold foil. A vine grows as you scroll, grapes ripen, the glass fills.'},
+  {id:'winelist',n:'II',name:'The Wine List',blurb:'Bottle green & parchment. The weekend as a wine label and a carte des vins.'},
+  {id:'candlelight',n:'III',name:'Candlelight',blurb:'Warm, organic, botanical. A candle glow follows you; blow it out at the end.'},
+  {id:'route',n:'IV',name:'The Route',blurb:'A living window: the sky moves hour by hour as you travel through Kent.'}
+];
+const f=document.getElementById('f'),bar=document.getElementById('bar'),blurb=document.getElementById('blurb');
+bar.innerHTML=D.map(d=>`<button data-id="${d.id}"><b>${d.n}</b><span>${d.name}</span></button>`).join('')+'<a id="open" target="_blank">open ↗</a>';
+let bt;
+function go(id,first){
+  const d=D.find(x=>x.id===id)||D[0];
+  bar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.id===d.id));
+  document.getElementById('open').href='directions/'+d.id+'.html';
+  history.replaceState(null,'','#'+d.id);
+  blurb.textContent=d.n+'. '+d.name+' — '+d.blurb;blurb.classList.add('on');clearTimeout(bt);bt=setTimeout(()=>blurb.classList.remove('on'),4200);
+  if(first){f.src='directions/'+d.id+'.html';return}
+  f.classList.add('fade');setTimeout(()=>{f.src='directions/'+d.id+'.html'},300);
+}
+f.addEventListener('load',()=>{f.classList.remove('fade');try{f.contentWindow.addEventListener('keydown',key)}catch(e){}});
+bar.addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.id)});
+function key(e){const i=D.findIndex(d=>location.hash==='#'+d.id);
+  if(/^[1-4]$/.test(e.key))go(D[+e.key-1].id);
+  if(e.key==='ArrowRight'&&e.shiftKey)go(D[(i+1)%4].id);
+  if(e.key==='ArrowLeft'&&e.shiftKey)go(D[(i+3)%4].id)}
+addEventListener('keydown',key);
+go(location.hash.slice(1),true);
+</script>
+</body>
+</html>
