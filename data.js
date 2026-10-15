@@ -27,8 +27,8 @@ window.WEEKEND = {
           note: "The first proper feast of the weekend.", pair: "A generous lager" },
         { time: "20:00", hour: 20, loc: "coast", icon: "brush", title: "Life Drawing", sub: "& a Surprise", surprise: true,
           note: "Bring a steady hand. Say nothing to the groom.", pair: "Classified" },
-        { time: "21:00", hour: 21, loc: "coast", icon: "dice", title: "Games Night", sub: "Hosted by Prince",
-          note: "House rules apply. Prince's rules apply more.", pair: "The dealer's choice" }
+        { time: "21:00", hour: 21, loc: "coast", icon: "dice", title: "Games Night", sub: "Hosted by Prince & Luke",
+          note: "House rules apply. Prince and Luke's rules apply more.", pair: "The dealer's choice" }
       ]
     },
     {
